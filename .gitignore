@@ -1,0 +1,53 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environments
+env/
+Env/
+venv/
+ENV/
+.venv/
+
+# Environment variables
+.env
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.sqlite3
+*.db
+
+# Django media & static files
+media/
+staticfiles/
+static/
+
+# Migrations - optional, you can track if needed
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# VSCode, PyCharm, IDE settings
+.vscode/
+.idea/
+
+# Test output
+htmlcov/
+coverage.xml
+*.cover
+*.py,cover
+
+# Jupyter
+.ipynb_checkpoints
+
+# MacOS / Windows
+.DS_Store
+Thumbs.db
+
+*.pth

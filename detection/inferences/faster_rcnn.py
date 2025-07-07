@@ -3,6 +3,7 @@ from torchvision.models.detection import fasterrcnn_resnet50_fpn
 from torchvision import transforms as T
 import os
 from collections import defaultdict
+from ..model_loader import download_fasterrcnn_model
 
 # Mapping label string untuk masing-masing model
 YOLO_LABEL_MAP = {
@@ -22,11 +23,13 @@ FRCNN_LABEL_MAP = {
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-model_path = os.path.join(BASE_DIR, "../models/fasterrcnn_best_model.pth")
-faster_rcnn = fasterrcnn_resnet50_fpn(pretrained=False, num_classes=5)
-checkpoint = torch.load(model_path, map_location=device)
-faster_rcnn.load_state_dict(checkpoint["model"])
-faster_rcnn.eval().to(device)
+# model_path = os.path.join(BASE_DIR, "../models/fasterrcnn_best_model.pth")
+# faster_rcnn = fasterrcnn_resnet50_fpn(pretrained=False, num_classes=5)
+# checkpoint = torch.load(model_path, map_location=device)
+# faster_rcnn.load_state_dict(checkpoint["model"])
+# faster_rcnn.eval().to(device)
+
+faster_rcnn = download_fasterrcnn_model().to(device)
 
 transform = T.Compose([
     T.Resize((224, 224)),

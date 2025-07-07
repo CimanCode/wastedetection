@@ -22,19 +22,23 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-my6x$f$+j*g)t@c6**%4x%r3qz4=b#n%63wv4qpke+k$x@8-+q'
+# SECRET_KEY = 'django-insecure-my6x$f$+j*g)t@c6**%4x%r3qz4=b#n%63wv4qpke+k$x@8-+q'
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-my6x$f$+j*g)t@c6**%4x%r3qz4=b#n%63wv4qpke+k$x@8-+q")
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
 
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Application definition
-
 AUTH_USER_MODEL = 'api.User'
 
 INSTALLED_APPS = [
@@ -80,7 +84,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'wastedetection.urls'
@@ -107,20 +110,20 @@ WSGI_APPLICATION = 'wastedetection.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'wastedetection',
-        'USER': 'postgres',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '5432'
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'wastedetection',
+    #     'USER': 'postgres',
+    #     'PASSWORD': '',
+    #     'HOST': 'localhost',
+    #     'PORT': '5432'
+    # }
 
-    # 'default': dj_database_url.config(
-    #     default=os.environ.get("DATABASE_URL", "postgres://user:password@localhost:5432/wastedetection"),
-    #     conn_max_age=600,
-    #     ssl_require=not DEBUG  # Heroku membutuhkan SSL jika DEBUG=False
-    # )
+    'default': dj_database_url.config(
+        default=os.environ.get("DATABASE_URL"),
+        conn_max_age=600,
+        ssl_require=not DEBUG
+    )
 }
 
 

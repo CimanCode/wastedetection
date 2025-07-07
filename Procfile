@@ -1,0 +1,1 @@
+web: gunicorn wastedetection.wsgi --log-file - 

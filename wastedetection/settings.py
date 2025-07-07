@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,8 +27,11 @@ SECRET_KEY = 'django-insecure-my6x$f$+j*g)t@c6**%4x%r3qz4=b#n%63wv4qpke+k$x@8-+q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
 
 # Application definition
 
@@ -67,6 +71,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -75,6 +80,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'wastedetection.urls'
@@ -102,13 +108,19 @@ WSGI_APPLICATION = 'wastedetection.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'wastedetection',
-        'USER': 'root',
+        'USER': 'postgres',
         'PASSWORD': '',
         'HOST': 'localhost',
-        'PORT': '3306'
+        'PORT': '5432'
     }
+
+    # 'default': dj_database_url.config(
+    #     default=os.environ.get("DATABASE_URL", "postgres://user:password@localhost:5432/wastedetection"),
+    #     conn_max_age=600,
+    #     ssl_require=not DEBUG  # Heroku membutuhkan SSL jika DEBUG=False
+    # )
 }
 
 
@@ -152,3 +164,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Tambahkan ini agar whitenoise bisa handle file static di produksi
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

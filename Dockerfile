@@ -1,37 +1,39 @@
 FROM python:3.11-slim
 
-# Install OS dependencies
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Install OS-level dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
-    python3-dev \
     build-essential \
     libpq-dev \
     default-libmysqlclient-dev \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
     libjpeg-dev \
     libpng-dev \
     libfreetype6-dev \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
     curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-
-# Set workdir
+# Set work directory
 WORKDIR /app
 
 # Install Python dependencies
 COPY requirements.txt .
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Copy app source code
+# Copy project files
 COPY . .
 
-# Run collectstatic if you use staticfiles
-RUN python manage.py collectstatic --noinput
+# Gunakan whitenoise jika collectstatic butuh
+RUN python manage.py collectstatic --noinput || echo "Collectstatic failed (skip in dev)"
 
-# Expose port
+# Expose port for Gunicorn
 EXPOSE 8000
 
-# Start Gunicorn server
+# Start server
 CMD ["gunicorn", "wastedetection.wsgi:application", "--bind", "0.0.0.0:8000"]

@@ -3,15 +3,18 @@ FROM python:3.11-slim
 # Install OS dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
+    python3-dev \
+    build-essential \
     libpq-dev \
+    default-libmysqlclient-dev \
     libgl1-mesa-glx \
     libglib2.0-0 \
     libjpeg-dev \
     libpng-dev \
     libfreetype6-dev \
-    build-essential \
     curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 
 # Set workdir
 WORKDIR /app

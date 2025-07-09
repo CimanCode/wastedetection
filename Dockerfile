@@ -1,30 +1,36 @@
-# Gunakan image slim yang ringan dan stabil
+# Base image ringan yang stabil
 FROM python:3.11-slim-bullseye
+
+# Set environment variabel untuk non-interaktif install
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # Set working directory
 WORKDIR /app
 
-# Salin dependency dan install requirements
-COPY requirements.txt .
+# Install system dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    apt-utils \
-    curl \
     gcc \
-    build-essential \
     libpq-dev \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
-    libmysqlclient-dev \
     libjpeg-dev \
     libpng-dev \
     libfreetype6-dev \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    libgl1 \
+    libglib2.0-0 \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade pip && pip install -r requirements.txt
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-# Salin semua file project
+# Copy source code
 COPY . .
 
-# Jalankan app
+# Collect static files (optional - safe)
+RUN python manage.py collectstatic --noinput || echo "No static files to collect"
+
+# Gunicorn sebagai web server
 CMD ["gunicorn", "wastedetection.wsgi:application", "--bind", "0.0.0.0:8000"]

@@ -1,32 +1,34 @@
-FROM python:3.11-slim-bullseye
+FROM python:3.11-slim
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
-WORKDIR /app
-
-RUN apt-get update && apt-get install -y \
-    build-essential \
+# Install OS dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libpq-dev \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
     libjpeg-dev \
     libpng-dev \
     libfreetype6-dev \
-    libgl1 \
-    libglib2.0-0 \
-    gfortran \
-    libatlas-base-dev \
+    build-essential \
+    curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Set workdir
+WORKDIR /app
+
+# Install Python dependencies
 COPY requirements.txt .
 RUN pip install --upgrade pip
-RUN pip install torch==2.2.2 torchvision==0.17.2 --index-url https://download.pytorch.org/whl/cpu
-RUN pip install ultralytics==8.3.161
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-
+# Copy app source code
 COPY . .
 
-RUN python manage.py collectstatic --noinput || true
+# Run collectstatic if you use staticfiles
+RUN python manage.py collectstatic --noinput
 
+# Expose port
+EXPOSE 8000
+
+# Start Gunicorn server
 CMD ["gunicorn", "wastedetection.wsgi:application", "--bind", "0.0.0.0:8000"]

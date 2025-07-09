@@ -1,25 +1,32 @@
-# Gunakan image dasar Python
-FROM python:3.10-slim
+FROM python:3.11-slim
 
-# Install system dependencies (penting untuk opencv, torch, dsb)
+# System dependencies
 RUN apt-get update && apt-get install -y \
-    gcc \
-    libgl1-mesa-glx \
+    build-essential \
+    libpq-dev \
+    libgl1 \
     libglib2.0-0 \
+    libmysqlclient-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libfreetype6-dev \
+    gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Atur direktori kerja
+# Upgrade pip dan wheel
+RUN pip install --upgrade pip setuptools wheel
+
+# Set working directory
 WORKDIR /app
 
-# Salin file
+# Copy requirements
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy project files
 COPY . .
 
-# Install dependencies
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
-
-# Collect static files
-RUN python manage.py collectstatic --noinput
-
-# Jalankan server menggunakan gunicorn
-CMD gunicorn wastedetection.wsgi:application --bind 0.0.0.0:$PORT
+# Gunicorn sebagai web server
+CMD ["gunicorn", "wastedetection.wsgi:application", "--bind", "0.0.0.0:8000"]

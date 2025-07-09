@@ -4,10 +4,12 @@ import numpy as np
 import io
 import os
 from rest_framework.exceptions import APIException
+from ..model_loader import download_yolo_model
 
 
+model_path = download_yolo_model()
 # Load YOLO model sekali
-model_path = os.path.join(os.path.dirname(__file__), '../models/yolo_best.pt')
+# model_path = os.path.join(os.path.dirname(__file__), '../models/yolo_best.pt')
 model = YOLO(model_path)
 
 def preprocess_image(img_bytes, input_size=(416, 416)):

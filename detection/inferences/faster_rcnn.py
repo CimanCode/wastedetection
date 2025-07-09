@@ -22,14 +22,21 @@ FRCNN_LABEL_MAP = {
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # model_path = os.path.join(BASE_DIR, "../models/fasterrcnn_best_model.pth")
 # faster_rcnn = fasterrcnn_resnet50_fpn(pretrained=False, num_classes=5)
 # checkpoint = torch.load(model_path, map_location=device)
 # faster_rcnn.load_state_dict(checkpoint["model"])
 # faster_rcnn.eval().to(device)
 
-faster_rcnn = download_fasterrcnn_model().to(device)
+# Unduh model jika belum ada
+model_path = download_fasterrcnn_model()
+
+# Load model
+faster_rcnn = fasterrcnn_resnet50_fpn(pretrained=False, num_classes=5)
+checkpoint = torch.load(model_path, map_location=device)
+faster_rcnn.load_state_dict(checkpoint["model"])
+faster_rcnn.eval().to(device)
 
 transform = T.Compose([
     T.Resize((224, 224)),

@@ -29,8 +29,8 @@ SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-my6x$f$+j*g)t@c6**%4x%r3qz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# ALLOWED_HOSTS = ['*']
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -122,7 +122,7 @@ DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get("DATABASE_URL"),
         conn_max_age=600,
-        ssl_require=not DEBUG
+        ssl_require=True
     )
 }
 

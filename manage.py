@@ -2,7 +2,8 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-# from detection import install_heavy_libs
+from detection.install_runtime import install_heavy_libs
+install_heavy_libs()
 
 
 def main():

@@ -1,5 +1,7 @@
+# Gunakan image python non-slim
 FROM python:3.11
 
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
@@ -12,13 +14,21 @@ RUN apt-get update && apt-get install -y \
     gcc \
     && rm -rf /var/lib/apt/lists/*
 
+# Buat direktori kerja
 WORKDIR /app
 
+# Salin requirements
 COPY requirements.txt .
 
-RUN pip install --upgrade pip setuptools wheel
+# Install python dependencies
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Salin semua file ke image
 COPY . .
 
-CMD ["gunicorn", "wastedetection.wsgi:application", "--bind", "0.0.0.0:8000"]
+# Jalankan collectstatic saat build image
+RUN python manage.py collectstatic --noinput || true
+
+# Jalankan gunicorn saat container mulai
+CMD gunicorn wastedetection.wsgi:application --bind 0.0.0.0:$PORT

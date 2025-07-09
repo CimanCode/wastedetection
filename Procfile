@@ -1,1 +1,1 @@
-web: gunicorn wastedetection.wsgi
+web: gunicorn wastedetection.wsgi:application --bind 0.0.0.0:$PORT

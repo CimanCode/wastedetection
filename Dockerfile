@@ -24,7 +24,8 @@ RUN apt-get update && \
 # Install Python dependencies
 COPY requirements.txt .
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt || cat /root/.pip/pip.log
+
 
 # Copy source code
 COPY . .

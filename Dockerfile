@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install torch==2.2.2 torchvision==0.17.2 --index-url https://download.pytorch.org/whl/cpu
+RUN pip install ultralytics==8.3.161
 RUN pip install -r requirements.txt
 
 

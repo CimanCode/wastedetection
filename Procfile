@@ -1,1 +1,1 @@
-web: gunicorn wastewise.wsgi --log-file - 
+web: gunicorn wastedetection.wsgi

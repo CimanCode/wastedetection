@@ -16,4 +16,3 @@ scipy==1.11.4
 pillow==10.3.0
 matplotlib==3.8.4
 pandas==2.2.2
-mysqlclient>=2.2,<2.3

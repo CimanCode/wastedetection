@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.db
+*.log
+*.h5
+*.pt
+*.pth
+*.pkl
+media/
+static/
+.env
+node_modules/

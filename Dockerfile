@@ -20,10 +20,15 @@ RUN apt-get update && apt-get install -y \
 
 COPY requirements.txt .
 
-# Install large dependencies first
 RUN pip install --upgrade pip
-RUN pip install torch==2.7.1 torchvision==0.22.1 --extra-index-url https://download.pytorch.org/whl/cpu
+
+# Pisahkan installasi agar lebih mudah identifikasi error
+RUN pip install Django==5.2.4
+RUN pip install djangorestframework==3.16.0
+RUN pip install gunicorn==23.0.0
+RUN pip install psycopg2-binary==2.9.10
 RUN pip install opencv-python-headless==4.11.0.86
+RUN pip install torch==2.7.1 torchvision==0.22.1 --extra-index-url https://download.pytorch.org/whl/cpu
 RUN pip install -r requirements.txt
 
 COPY . .

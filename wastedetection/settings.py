@@ -115,16 +115,16 @@ WSGI_APPLICATION = 'wastedetection.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'wastedetection',
-    #     'USER': 'postgres',
-    #     'PASSWORD': '',
-    #     'HOST': 'localhost',
-    #     'PORT': '5432'
-    # }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'wastedetection',
+        'USER': 'postgres',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '5432'
+    }
 
-    'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
+    # 'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
 }
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

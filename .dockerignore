@@ -3,13 +3,11 @@ __pycache__/
 *.pyo
 *.pyd
 *.sqlite3
-*.db
 *.log
-*.h5
 *.pt
 *.pth
 *.pkl
+models/
+.env
 media/
 static/
-.env
-node_modules/

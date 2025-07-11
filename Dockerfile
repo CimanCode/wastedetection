@@ -1,10 +1,10 @@
+# Gunakan Python base image yang ringan
 FROM python:3.11-slim
 
-# Env
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# Install OS dependencies
+# Install dependencies OS
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     build-essential \
@@ -18,22 +18,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set workdir
 WORKDIR /app
 
-# Install dependencies
+# Salin dependensi dan install
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copy project files
+# Salin seluruh project
 COPY . .
 
-# Static file collection (optional)
+# Jalankan collectstatic (kalau perlu)
 RUN python manage.py collectstatic --noinput || echo "skip collectstatic"
 
-# Expose port
+# Buka port
 EXPOSE 8000
 
-# Start Gunicorn server
+# Jalankan server menggunakan Gunicorn
 CMD ["gunicorn", "wastedetection.wsgi:application", "--bind", "0.0.0.0:8000"]

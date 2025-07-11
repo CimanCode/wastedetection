@@ -10,7 +10,7 @@ from torchvision.ops import nms
 from django.conf import settings
 from django.utils.timezone import now
 from .yolo import run_yolo  # Assume initialized YOLO model from your integration
-from .faster_rcnn import faster_rcnn, transform, vote_fusion
+from .faster_rcnn import vote_fusion
 from torchvision.ops import batched_nms
 from api.models import TrashInfo, Detection, History
 from django.utils import timezone

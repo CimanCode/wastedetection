@@ -2,9 +2,6 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-from detection.install_runtime import install_heavy_libs
-install_heavy_libs()
-
 
 def main():
     """Run administrative tasks."""
@@ -22,5 +19,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-# install_heavy_libs()

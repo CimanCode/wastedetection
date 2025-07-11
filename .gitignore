@@ -29,10 +29,6 @@ media/
 staticfiles/
 static/
 
-# Migrations - optional, you can track if needed
-**/migrations/*.py
-!**/migrations/__init__.py
-
 # VSCode, PyCharm, IDE settings
 .vscode/
 .idea/

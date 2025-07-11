@@ -4,13 +4,14 @@ import numpy as np
 import io
 import os
 from rest_framework.exceptions import APIException
+from functools import lru_cache
 from ..model_loader import download_yolo_model
 
 
-model_path = download_yolo_model()
-# Load YOLO model sekali
-# model_path = os.path.join(os.path.dirname(__file__), '../models/yolo_best.pt')
-model = YOLO(model_path)
+@lru_cache(maxsize=1)
+def get_yolo_model():
+    path = download_yolo_model()
+    return YOLO(path)
 
 def preprocess_image(img_bytes, input_size=(416, 416)):
     try:
@@ -28,6 +29,7 @@ def scale_bbox(bbox, input_size=(416, 416), output_size=(640, 480)):
 
 def predict_yolo_from_bytes(img_bytes, conf_threshold=0.25, input_size=(416, 416), output_size=(640, 480)):
     try:
+        model = get_yolo_model()
         image_np = preprocess_image(img_bytes, input_size)
 
         results = model.predict(image_np, imgsz=input_size[0], conf=conf_threshold, verbose=False)
@@ -54,6 +56,7 @@ def predict_yolo_from_bytes(img_bytes, conf_threshold=0.25, input_size=(416, 416
         raise APIException(f"Prediction failed: {str(e)}")
 
 def run_yolo(image_path: str, conf: float = 0.25):
+    model = get_yolo_model()
     results = model(image_path, conf=conf)
     
     for i, result in enumerate(results):

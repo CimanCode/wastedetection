@@ -35,5 +35,5 @@ RUN python manage.py collectstatic --noinput || echo "skip collectstatic"
 EXPOSE 8000
 
 # Jalankan server menggunakan Gunicorn
-CMD ["sh", "-c", "python manage.py migrate && python manage.py seed_trashinfo && gunicorn wastedetection.wsgi:application --bind 0.0.0.0:8000"]
+CMD ["sh", "-c", "python manage.py migrate && python manage.py seed_trashinfo && gunicorn wastedetection.wsgi:application --bind 0.0.0.0:8000 --timeout 120 --workers 2"]
 

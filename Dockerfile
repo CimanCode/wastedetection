@@ -26,6 +26,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 WORKDIR /app
 
 # Copy installed wheels from builder
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1-mesa-glx \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    
 COPY --from=builder /wheels /wheels
 RUN pip install --no-cache-dir /wheels/*
 

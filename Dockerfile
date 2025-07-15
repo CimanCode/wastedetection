@@ -10,6 +10,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libjpeg-dev \
     libpng-dev \
     libfreetype6-dev \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender1 \
+    libgl1 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install
@@ -23,11 +28,6 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 WORKDIR /app
-
-# Copy installed wheels from builder
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgl1 \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /wheels /wheels
 RUN pip install --no-cache-dir /wheels/*

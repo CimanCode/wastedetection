@@ -10,7 +10,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libjpeg-dev \
     libpng-dev \
     libfreetype6-dev \
-    libgl1-mesa-glx \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install
@@ -27,9 +26,9 @@ WORKDIR /app
 
 # Copy installed wheels from builder
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgl1-mesa-glx \
+    libgl1 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
-    
+
 COPY --from=builder /wheels /wheels
 RUN pip install --no-cache-dir /wheels/*
 

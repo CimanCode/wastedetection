@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libjpeg-dev \
     libpng-dev \
     libfreetype6-dev \
+    libgl1-mesa-glx \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install

@@ -1,15 +1,13 @@
-# Gunakan Python base image yang ringan
+# Dockerfile
 FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Install dependencies OS
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     build-essential \
     libpq-dev \
-    default-libmysqlclient-dev \
     libjpeg-dev \
     libpng-dev \
     libfreetype6-dev \
@@ -20,20 +18,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Salin dependensi dan install
-COPY requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip && \
+COPY requirements.txt ./
+RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Salin seluruh project
 COPY . .
 
-# Jalankan collectstatic (kalau perlu)
+# collectstatic jika diperlukan (jika pakai whitenoise)
 RUN python manage.py collectstatic --noinput || echo "skip collectstatic"
 
-# Buka port
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 8000
 
-# Jalankan server menggunakan Gunicorn
-CMD ["sh", "-c", "python manage.py migrate && python manage.py seed_trashinfo && gunicorn wastedetection.wsgi:application --bind 0.0.0.0:8000 --timeout 120 --workers 2"]
-
+ENTRYPOINT ["/entrypoint.sh"]

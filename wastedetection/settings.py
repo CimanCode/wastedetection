@@ -27,8 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-my6x$f$+j*g)t@c6**%4x%r3qz4=b#n%63wv4qpke+k$x@8-+q'
-SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-my6x$f$+j*g)t@c6**%4x%r3qz4=b#n%63wv4qpke+k$x@8-+q")
+SECRET_KEY = 'django-insecure-my6x$f$+j*g)t@c6**%4x%r3qz4=b#n%63wv4qpke+k$x@8-+q'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -124,7 +123,7 @@ DATABASES = {
     #     'PORT': '5432'
     # }
 
-    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
 }
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

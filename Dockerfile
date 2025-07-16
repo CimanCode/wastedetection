@@ -3,7 +3,7 @@ FROM python:3.11-slim as builder
 
 WORKDIR /app
 
-# Install system dependencies
+# Install build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libpq-dev \
@@ -17,7 +17,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libgtk-3-0 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements and install
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt
 
@@ -29,17 +28,26 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+# Install runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1 \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender1 \
+    libgtk-3-0 \
+    netcat \
+    curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Install python packages
 COPY --from=builder /wheels /wheels
 RUN pip install --no-cache-dir /wheels/*
 
 # Copy project files
 COPY . .
 
-# Collect static (optional)
+# Collect static (optional, skip if not needed)
 RUN python manage.py collectstatic --noinput || echo "skip collectstatic"
 
 # Entrypoint

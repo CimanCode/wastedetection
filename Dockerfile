@@ -36,7 +36,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxext6 \
     libxrender1 \
     libgtk-3-0 \
-    netcat \
+    netcat-openbsd \
     curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 

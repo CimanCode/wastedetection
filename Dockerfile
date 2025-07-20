@@ -18,7 +18,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-RUN pip install --upgrade pip && pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt
+RUN pip install --upgrade pip \
+ && pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt \
+ && pip install --no-cache-dir /wheels/*
 
 COPY . .
 

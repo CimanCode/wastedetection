@@ -28,6 +28,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+RUN python download.py
+
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1 \

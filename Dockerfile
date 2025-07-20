@@ -28,8 +28,6 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-RUN python download.py
-
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1 \
@@ -48,6 +46,8 @@ RUN pip install --no-cache-dir /wheels/*
 
 # Copy project files
 COPY . .
+
+RUN python download.py
 
 # Collect static (optional, skip if not needed)
 RUN python manage.py collectstatic --noinput || echo "skip collectstatic"

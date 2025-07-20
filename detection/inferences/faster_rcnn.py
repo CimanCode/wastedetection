@@ -22,20 +22,20 @@ FRCNN_LABEL_MAP = {
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-# model_path = os.path.join(BASE_DIR, "../models/fasterrcnn_best_model.pth")
-# faster_rcnn = fasterrcnn_resnet50_fpn(pretrained=False, num_classes=5)
-# checkpoint = torch.load(model_path, map_location=device)
-# faster_rcnn.load_state_dict(checkpoint["model"])
-# faster_rcnn.eval().to(device)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(BASE_DIR, "../models/fasterrcnn_best_model.pth")
+faster_rcnn = fasterrcnn_resnet50_fpn(pretrained=False, num_classes=5)
+checkpoint = torch.load(model_path, map_location=device)
+faster_rcnn.load_state_dict(checkpoint["model"])
+faster_rcnn.eval().to(device)
 
-def get_frcnn_model():
-    model_path = download_fasterrcnn_model()
-    model = fasterrcnn_resnet50_fpn(pretrained=False, num_classes=5)
-    checkpoint = torch.load(model_path, map_location=device)
-    model.load_state_dict(checkpoint["model"])
-    model.eval().to(device)
-    return model
+# def get_frcnn_model():
+#     model_path = download_fasterrcnn_model()
+#     model = fasterrcnn_resnet50_fpn(pretrained=False, num_classes=5)
+#     checkpoint = torch.load(model_path, map_location=device)
+#     model.load_state_dict(checkpoint["model"])
+#     model.eval().to(device)
+#     return model
 
 transform = T.Compose([
     T.Resize((224, 224)),
@@ -48,7 +48,7 @@ def vote_fusion(yolo_box, yolo_conf, yolo_cls, pil_img):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Transform image once before passing to FRCNN
-    faster_rcnn = get_frcnn_model()
+    faster_rcnn = faster_rcnn
     tensor_img = transform(pil_img).to(device)
     frcnn_output = faster_rcnn([tensor_img])[0] 
 

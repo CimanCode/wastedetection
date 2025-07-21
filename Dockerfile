@@ -22,10 +22,6 @@ RUN pip install --upgrade pip \
  && pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt \
  && pip install --no-cache-dir /wheels/*
 
-COPY . .
-
-RUN python download.py
-
 # Stage 2: Runtime
 FROM python:3.11-slim
 
@@ -51,7 +47,9 @@ COPY --from=builder /wheels /wheels
 RUN pip install --no-cache-dir /wheels/*
 
 # Copy project files
-COPY --from=builder /app /app
+COPY . .
+
+RUN python download.py
 
 # Collect static (optional, skip if not needed)
 RUN python manage.py collectstatic --noinput || echo "skip collectstatic"

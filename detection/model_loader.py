@@ -7,6 +7,8 @@ from tqdm import tqdm
 @lru_cache(maxsize=1)
 def download_fasterrcnn_model():
     model_url = "https://huggingface.co/firmanabdlrhmn/fasterrcnn_model/resolve/main/fasterrcnn_best_model.pth"
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    model_dir = os.path.join(base_dir, "models")
     model_dir = "models"
     model_path = os.path.join(model_dir, "fasterrcnn_best_model.pth")
 

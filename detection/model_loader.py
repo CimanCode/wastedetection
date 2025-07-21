@@ -2,20 +2,33 @@
 import os
 import requests
 from functools import lru_cache
+from tqdm import tqdm
 
 @lru_cache(maxsize=1)
 def download_fasterrcnn_model():
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    model_dir = os.path.join(base_dir, "models")
+    model_url = "https://huggingface.co/firmanabdlrhmn/fasterrcnn_model/resolve/main/fasterrcnn_best_model.pth"
+    model_dir = "models"
     model_path = os.path.join(model_dir, "fasterrcnn_best_model.pth")
 
     if not os.path.exists(model_path):
         os.makedirs(model_dir, exist_ok=True)
-        print("Downloading Faster R-CNN...")
-        r = requests.get("https://huggingface.co/firmanabdlrhmn/fasterrcnn_model/resolve/main/fasterrcnn_best_model.pth")
-        r.raise_for_status()
-        with open(model_path, 'wb') as f:
-            f.write(r.content)
+        print("Downloading Faster R-CNN model...")
+
+        response = requests.get(model_url, stream=True)
+        total_size = int(response.headers.get('content-length', 0))
+        block_size = 1024
+
+        if response.status_code != 200:
+            raise Exception(f"Download failed with status code {response.status_code}")
+
+        with open(model_path, 'wb') as f, tqdm(total=total_size, unit='B', unit_scale=True, desc='Downloading') as bar:
+            for data in response.iter_content(block_size):
+                f.write(data)
+                bar.update(len(data))
+
+        print("Download complete.")
+    else:
+        print("Model already exists, skipping download.")
 
     return model_path
 

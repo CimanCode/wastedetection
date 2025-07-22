@@ -56,6 +56,9 @@ def predict_yolo_from_bytes(img_bytes, conf_threshold=0.25, input_size=(416, 416
         raise APIException(f"Prediction failed: {str(e)}")
 
 def run_yolo(image_path: str, conf: float = 0.25):
+    if not os.path.exists(image_path):
+        raise APIException(f"Gambar tidak ditemukan: {image_path}")
+    
     model = get_yolo_model()
     results = model(image_path, conf=conf)
     

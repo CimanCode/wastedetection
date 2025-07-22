@@ -46,10 +46,8 @@ transform = T.Compose([
 ])
 
 def vote_fusion(yolo_box, yolo_conf, yolo_cls, pil_img):
+    global faster_rcnn
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-    # Transform image once before passing to FRCNN
-    faster_rcnn = faster_rcnn
     tensor_img = transform(pil_img).to(device)
     frcnn_output = faster_rcnn([tensor_img])[0] 
 

@@ -176,7 +176,7 @@ from .faster_rcnn import vote_fusion
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
-ALLOWED_IMAGE_FORMATS = ['JPEG', 'JPG', 'PNG']
+ALLOWED_IMAGE_FORMATS = ['jpeg', 'jpg', 'png']
 
 def validate_image_format(pil_img):
     if pil_img.format not in ALLOWED_IMAGE_FORMATS:

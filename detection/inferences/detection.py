@@ -196,7 +196,6 @@ def detect_and_map(image_file, user=None):
     try:
         image_bytes = image_file.read()
         pil_img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-        validate_image_format(pil_img)
     except UnidentifiedImageError:
         raise ValidationError("File tidak dapat dibaca sebagai gambar.")
     except ValidationError as ve:

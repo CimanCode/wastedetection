@@ -176,12 +176,6 @@ from .faster_rcnn import vote_fusion
 from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 
-ALLOWED_IMAGE_FORMATS = ['jpeg', 'jpg', 'png']
-
-def validate_image_format(pil_img):
-    if pil_img.format not in ALLOWED_IMAGE_FORMATS:
-        raise ValidationError("File harus dalam format JPG, JPEG, atau PNG.")
-
 def draw_detection(draw, bbox, label, conf, font):
     draw.rectangle(bbox, outline="lime", width=3)
     text = f"{label} ({conf:.2f})"

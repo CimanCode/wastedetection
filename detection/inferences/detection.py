@@ -87,6 +87,7 @@ def detect_and_map(image_file, user=None):
         try:
             info = TrashInfo.objects.get(label=label_str)
         except TrashInfo.DoesNotExist:
+            print(f"[WARNING] Label '{label_str}' tidak ditemukan di TrashInfo DB.")
             continue
 
         results.append({
@@ -128,7 +129,11 @@ def detect_and_map(image_file, user=None):
         draw_img.save(os.path.join(settings.MEDIA_ROOT, result_image_path))
 
         for det in results:
-            label_obj = TrashInfo.objects.get(label=det["label"])
+            try:
+                label_obj = TrashInfo.objects.get(label=det["label"])
+            except TrashInfo.DoesNotExist:
+                print(f"[ERROR] Label '{det['label']}' hilang saat save ke DB. Dilewati.")
+                continue
             detection_obj = Detection.objects.create(
                 user=user,
                 label=label_obj,
